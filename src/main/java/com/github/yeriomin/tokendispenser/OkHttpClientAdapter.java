@@ -56,7 +56,7 @@ class OkHttpClientAdapter extends HttpClientAdapter {
     @Override
     public byte[] get(String url, Map<String, String> params, Map<String, String> headers) throws IOException {
         Request.Builder requestBuilder = new Request.Builder()
-            .url(buildUrl(url, params))
+            .url(buildUrl1(url, params))
             .get();
 
         return request(requestBuilder, headers);
@@ -64,7 +64,7 @@ class OkHttpClientAdapter extends HttpClientAdapter {
 
     @Override
     public byte[] postWithoutBody(String url, Map<String, String> urlParams, Map<String, String> headers) throws IOException {
-        return post(buildUrl(url, urlParams).toString(), new HashMap<String, String>(), headers);
+        return post(buildUrl1(url, urlParams).toString(), new HashMap<String, String>(), headers);
     }
 
     @Override
@@ -131,7 +131,7 @@ class OkHttpClientAdapter extends HttpClientAdapter {
         return content;
     }
 
-    static private HttpUrl buildUrl(String url, Map<String, String> params) {
+    static private HttpUrl buildUrl1(String url, Map<String, String> params) {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
         if (null != params && !params.isEmpty()) {
             for (String name: params.keySet()) {
@@ -139,5 +139,20 @@ class OkHttpClientAdapter extends HttpClientAdapter {
             }
         }
         return urlBuilder.build();
+    }
+
+    @Override
+    public String buildUrl(String arg0, Map<String, String> arg1) {
+        return buildUrl1(arg0, arg1).toString();
+    }
+
+    @Override
+    public String buildUrlEx(String arg0, Map<String, List<String>> arg1) {
+        throw new RuntimeException();
+    }
+
+    @Override
+    public byte[] getEx(String arg0, Map<String, List<String>> arg1, Map<String, String> arg2) throws IOException {
+        throw new RuntimeException();
     }
 }
